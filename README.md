@@ -15,7 +15,7 @@ Currently known to work on Debian derived distributions:
 
 ## Unsupported
 
-Know *not* to work on:
+Known *not* to work on:
 
 - Ubuntu 22.04 LTS (jammy) on x86_64, the Ubuntu provided node.js is too old.
 
