@@ -1,0 +1,13 @@
+[Unit]
+Description=xdrd
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/bin/xdrd -p "{{ xdrd_password }}" -s {{ xdrd_serial_port }} -t {{ xdrd_tcpip_port }} {{ xdrd_additional_commands | default('') }}
+User={{ xdrd_user }}
+Restart=always
+SyslogIdentifier=xdrd
+
+[Install]
+WantedBy=multi-user.target

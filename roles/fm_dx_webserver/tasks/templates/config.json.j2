@@ -1,0 +1,75 @@
+{
+  "webserver": {
+    "webserverIp": "{{ fmdx_webserver_ip }}",
+    "webserverPort": "{{ fmdx_webserver_port }}",
+    "banlist": [],
+    "chatEnabled": true,
+    "tuningLimit": false,
+    "tuningLowerLimit": "0",
+    "tuningUpperLimit": "108",
+    "defaultTheme": "theme1",
+    "presets": [
+      "87.5",
+      "87.5",
+      "87.5",
+      "87.5"
+    ],
+    "bgImage": "",
+    "rdsMode": false
+  },
+  "xdrd": {
+    "wirelessConnection": true,
+    "comPort": "{{ fmdx_com_port }}",
+    "xdrdIp": "{{ fmdx_xdrd_ip }}",
+    "xdrdPort": "{{ xdrd_tcpip_port }}",
+    "xdrdPassword": "{{ xdrd_password }}"
+  },
+  "audio": {
+    "audioDevice": "Microphone (High Definition Audio Device)",
+    "audioChannels": 2,
+    "audioBitrate": "192k",
+    "softwareMode": false,
+    "startupVolume": "1"
+  },
+  "identification": {
+    "token": null,
+    "tunerName": "{{ fmdx_tuner_name }}",
+    "tunerDesc": "{{ fmdx_tuner_desc }}",
+    "lat": "",
+    "lon": "",
+    "broadcastTuner": false,
+    "proxyIp": "",
+    "contact": ""
+  },
+  "password": {
+    "tunePass": "",
+    "adminPass": "{{ fmdx_admin_pass }}"
+  },
+  "plugins": [],
+  "device": "tef",
+  "defaultFreq": "87.5",
+  "publicTuner": false,
+  "lockToAdmin": false,
+  "autoShutdown": false,
+  "enableDefaultFreq": false,
+  "antennas": {
+    "enabled": false,
+    "ant1": {
+      "enabled": false,
+      "name": "Ant A"
+    },
+    "ant2": {
+      "enabled": false,
+      "name": "Ant B"
+    },
+    "ant3": {
+      "enabled": false,
+      "name": "Ant C"
+    },
+    "ant4": {
+      "enabled": false,
+      "name": "Ant D"
+    }
+  },
+  "bwSwitch": false
+}
