@@ -1,0 +1,45 @@
+---
+- name: Prepare target systems
+  hosts: fmdx_servers
+
+  tasks:
+    - name: Ensure the system is Debian-based
+      ansible.builtin.assert:
+        that:
+          - ansible_os_family == "Debian"
+        fail_msg: This playbook is intended for Debian-based systems only.
+
+    - name: Check if sudo is installed
+      ansible.builtin.command: which sudo
+      register: sudo_installed
+      ignore_errors: true
+      changed_when: false
+
+    - name: Install sudo if not installed
+      ansible.builtin.apt:
+        name: sudo
+        state: present
+        update_cache: true
+      when: sudo_installed.rc != 0
+      become: true
+      become_method: ansible.builtin.su
+      become_user: root
+
+    - name: Configure passwordless sudo for fmdx
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/fmdx
+        content: |
+          fmdx ALL=(ALL) NOPASSWD:ALL
+        mode: "0440"
+      when: sudo_installed.rc != 0
+      become: true
+      become_method: ansible.builtin.su
+      become_user: root
+
+- name: Run roles on target systems
+  hosts: fmdx_servers
+  roles:
+    - role: xdrd
+      tags: xdrd
+    - role: fm_dx_webserver
+      tags: fm_dx_webserver

@@ -1,0 +1,14 @@
+[Unit]
+Description=FM-DX Webserver
+After=network-online.target xdrd.service
+Requires=xdrd.service
+
+[Service]
+ExecStart=npm run webserver
+WorkingDirectory={{ ansible_env.HOME }}/fm-dx-webserver-main/
+User= {{ ansible_user }}
+Restart=always
+SyslogIdentifier=fm-dx-webserver
+
+[Install]
+WantedBy=multi-user.target
