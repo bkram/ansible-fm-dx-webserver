@@ -4,28 +4,10 @@
     name:
       - nodejs
       - npm
+      - ffmpeg
     state: present
     update_cache: true
   become: true
-
-- name: Download the ZIP file
-  ansible.builtin.get_url:
-    url: https://github.com/NoobishSVK/fm-dx-webserver/archive/refs/heads/main.zip
-    dest: /tmp/fm-dx-webserver-main.zip
-    mode: "600"
-  delegate_to: localhost
-
-- name: Copy ZIP file to host
-  ansible.builtin.copy:
-    src: /tmp/fm-dx-webserver-main.zip
-    dest: "{{ ansible_env.HOME }}/fm-dx-webserver-main.zip"
-    mode: "0600"
-
-- name: Unzip the file
-  ansible.builtin.unarchive:
-    src: "{{ ansible_env.HOME }}/fm-dx-webserver-main.zip"
-    dest: "{{ ansible_env.HOME }}/"
-    remote_src: true
 
 - name: Add the current user to the audio group
   ansible.builtin.user:
@@ -34,28 +16,42 @@
     append: true
   become: true
 
-- name: Run npm install in the fm-dx-webserver-main directory
-  ansible.builtin.command:
-    cmd: npm install
-    chdir: "{{ ansible_env.HOME }}/fm-dx-webserver-main/"
-    creates: "{{ ansible_env.HOME }}/fm-dx-webserver-main/node_modules/.bin"
+- name: Create /opt/fm-dx-webserver directory
+  ansible.builtin.file:
+    path: /opt/fm-dx-webserver
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+  become: true
+
+- name: Clone or update the fm-dx-webserver repo from GitHub
+  ansible.builtin.git:
+    repo: https://github.com/NoobishSVK/fm-dx-webserver.git
+    dest: /opt/fm-dx-webserver
+    version: main
+    update: true
+    force: true
+  notify: Restart fm-dx-webserver
+
+- name: Install npm dependencies in the fm-dx-webserver-main directory
+  community.general.npm:
+    path: /opt/fm-dx-webserver/fm-dx-webserver/
+    state: present
+  notify: Restart fm-dx-webserver
 
 - name: Check if fm-dx-webserver config file exists
   ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/fm-dx-webserver-main/config.json"
+    path: /opt/fm-dx-webserver/config.json
   register: config_file
 
 - name: Create fm-dx-webserver config on first install
   ansible.builtin.template:
     src: config.json.j2
-    dest: "{{ ansible_env.HOME }}/fm-dx-webserver-main/config.json"
+    dest: /opt/fm-dx-webserver/config.json
     mode: "0644"
+  notify: Restart fm-dx-webserver
   when: not config_file.stat.exists
-
-- name: Reload systemd daemon
-  ansible.builtin.systemd:
-    daemon_reload: true
-  become: true
 
 - name: Deploy fm-dx-webserver.service from template
   ansible.builtin.template:
@@ -63,10 +59,13 @@
     dest: /etc/systemd/system/fm-dx-webserver.service
     mode: "0644"
   become: true
+  notify:
+    - Reload systemd daemon
+    - Restart fm-dx-webserver
 
 - name: Ensure fm-dx-webserver service is started and enabled
   ansible.builtin.systemd:
     name: fm-dx-webserver
-    state: started
     enabled: true
   become: true
+  notify: Restart fm-dx-webserver

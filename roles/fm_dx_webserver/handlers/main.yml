@@ -1,7 +1,7 @@
 ---
-- name: Restart xdrd service
+- name: Restart fm-dx-webserver
   ansible.builtin.systemd:
-    name: xdrd
+    name: fm-dx-webserver
     state: restarted
   become: true
 

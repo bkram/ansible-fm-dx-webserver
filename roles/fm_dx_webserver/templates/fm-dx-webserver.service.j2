@@ -5,7 +5,7 @@ Requires=xdrd.service
 
 [Service]
 ExecStart=npm run webserver
-WorkingDirectory={{ ansible_env.HOME }}/fm-dx-webserver-main/
+WorkingDirectory=/opt/fm-dx-webserver/fm-dx-webserver/
 User= {{ ansible_user }}
 Restart=always
 SyslogIdentifier=fm-dx-webserver

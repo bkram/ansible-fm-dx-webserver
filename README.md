@@ -11,13 +11,14 @@ Currently known to work on Debian derived distributions:
 
 - Debian 12 (bookworm) on Raspberry Pi.
 - Debian 12 (bookworm) on x86_64.
-- Ubuntu 24.04 LTS (noble) on x86_64.
+- Debian 12 (bookworm) on i386.
 
 ## Unsupported
 
 Known *not* to work on:
 
 - Ubuntu 22.04 LTS (jammy) on x86_64, the Ubuntu provided node.js is too old.
+- Ubuntu 24.04 LTS (noble) on x86_64. some issue with ansible git module.
 
 ## Requirements
 
