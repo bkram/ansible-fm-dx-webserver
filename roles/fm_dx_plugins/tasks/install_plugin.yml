@@ -9,6 +9,7 @@
   become: true
 
 - name: Install plugin when install is true
+  when: item.install
   block:
     - name: Debug the current plugin details
       ansible.builtin.debug:
@@ -22,14 +23,13 @@
         update: true
         force: true
 
-    - name: Synchronize plugin {{ item.shortname }} from remote src to remote dest
-      ansible.builtin.synchronize:
-        src: "/opt/fm-dx-plugins/{{ item.shortname }}/"
-        dest: "/opt/fm-dx-webserver/plugins/"
+    - name: Synchronize plugin {{ item.shortname }}
+      ansible.posix.synchronize:
+        src: /opt/fm-dx-plugins/{{ item.shortname }}/
+        dest: /opt/fm-dx-webserver/plugins/
         mode: push
         rsync_opts:
-          - "--exclude README.md"
-          - "--exclude LICENSE"
-          - "--exclude .git/"
+          - --exclude README.md
+          - --exclude LICENSE
+          - --exclude .git/
       delegate_to: "{{ inventory_hostname }}"
-  when: item.install
