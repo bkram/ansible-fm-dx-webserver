@@ -1,4 +1,13 @@
 ---
+- name: Add xdrd user with no interactive login and add to dialout group
+  ansible.builtin.user:
+    name: xdrd
+    shell: /usr/sbin/nologin
+    groups: dialout
+    append: true
+    state: present
+  become: true
+
 - name: Install xdrd build dependencies
   ansible.builtin.apt:
     name:
@@ -11,53 +20,35 @@
     update_cache: true
   become: true
 
-- name: Ensure /tmp/build directory exists
-  ansible.builtin.file:
-    path: /tmp/build
-    state: directory
-    mode: "0755"
-
-- name: Download the ZIP file
-  ansible.builtin.get_url:
-    url: https://github.com/kkonradpl/xdrd/archive/refs/heads/master.zip
-    dest: /tmp/xdrd-master.zip
-    mode: "600"
-  delegate_to: localhost
-
-- name: Copy ZIP file to host
-  ansible.builtin.copy:
-    src: /tmp/xdrd-master.zip
-    dest: /tmp/build/xdrd-master.zip
-    mode: "0600"
-
-- name: Unzip the file
-  ansible.builtin.unarchive:
-    src: /tmp/build/xdrd-master.zip
-    dest: /tmp/build/
-    remote_src: true
+- name: Clone or update the XDRD repo from GitHub
+  ansible.builtin.git:
+    repo: https://github.com/kkonradpl/xdrd.git
+    dest: /opt/build-xdrd/
+    version: master
+    update: true
+    force: true
+  register: xdrd_git_checkout
+  become: true
+  become_user: xdrd
 
 - name: Build xdrd executable
   ansible.builtin.command:
     cmd: make
-    chdir: /tmp/build/xdrd-master
-    creates: /tmp/build/xdrd-master/xdrd
+    chdir: /opt/build-xdrd/
+  become_user: xdrd
+  become: true
+  when: xdrd_git_checkout.changed # noqa: no-handler no-changed-when
 
 - name: Copy xdrd to /usr/bin
   ansible.builtin.copy:
-    src: /tmp/build/xdrd-master/xdrd
+    src: /opt/build-xdrd/xdrd
     dest: /usr/bin/xdrd
     mode: "0755"
     remote_src: true
   become: true
-
-- name: Add xdrd user with no interactive login and add to dialout group
-  ansible.builtin.user:
-    name: xdrd
-    shell: /usr/sbin/nologin
-    groups: dialout
-    append: true
-    state: present
-  become: true
+  notify:
+    - Restart xdrd service
+    - Restart fm-dx-webserver
 
 - name: Deploy xdrd.service from template
   ansible.builtin.template:
@@ -65,15 +56,14 @@
     dest: /etc/systemd/system/xdrd.service
     mode: "0644"
   become: true
-
-- name: Reload systemd daemon
-  ansible.builtin.systemd:
-    daemon_reload: true
-  become: true
+  register: xdrd_service
+  notify:
+    - Reload xdrd systemd daemon
+    - Restart xdrd service
+    - Restart fm-dx-webserver
 
 - name: Ensure xdrd service is started and enabled
   ansible.builtin.systemd:
     name: xdrd
-    state: started
     enabled: true
   become: true
