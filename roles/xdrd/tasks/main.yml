@@ -20,6 +20,15 @@
     update_cache: true
   become: true
 
+- name: Create /opt/build-xdrd directory
+  ansible.builtin.file:
+    path: /opt/build-xdrd
+    state: directory
+    owner: xdrd
+    group: xdrd
+    mode: "0755"
+  become: true
+
 - name: Clone or update the XDRD repo from GitHub
   ansible.builtin.git:
     repo: https://github.com/kkonradpl/xdrd.git
