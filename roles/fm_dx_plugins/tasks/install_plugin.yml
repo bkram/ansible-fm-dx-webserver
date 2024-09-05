@@ -8,12 +8,12 @@
     group: fmdx
   become: true
 
-- name: Debug the current plugin details
-  ansible.builtin.debug:
-    msg: "Processing plugin: {{ item.name }} with URL: {{ item.url }} and install status: {{ item.install }}"
-
-- name: Execute tasks if piet exists and is true
+- name: Install plugin when install is true
   block:
+    - name: Debug the current plugin details
+      ansible.builtin.debug:
+        msg: "Processing plugin: {{ item.name }} with URL: {{ item.url }} and install status: {{ item.install }}"
+
     - name: Clone or update the plugin repo {{ item.name }}
       ansible.builtin.git:
         repo: "{{ item.url }}"
