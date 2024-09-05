@@ -35,8 +35,8 @@
     "token": null,
     "tunerName": "{{ fmdx_tuner_name }}",
     "tunerDesc": "{{ fmdx_tuner_desc }}",
-    "lat": "",
-    "lon": "",
+    "lat": "{{ fmdx_lat | default("49.866317") }}",
+    "lon": "{{ fmdx_lon | default("14.817628") }}",
     "broadcastTuner": false,
     "proxyIp": "",
     "contact": ""
@@ -45,10 +45,10 @@
     "tunePass": "",
     "adminPass": "{{ fmdx_admin_pass }}"
   },
-  "plugins": [],
+  "plugins": [{% if fmdx_plugins %}{% for plugin in fmdx_plugins %}"{{ plugin.entrypoint }}"{{ ", " if not loop.last }}{% if not loop.last %}{% endif %}{% endfor %}{% endif %}],
   "device": "tef",
   "defaultFreq": "87.5",
-  "publicTuner": false,
+  "publicTuner": "{{ fmddx_public_tuner | default("true") }}",
   "lockToAdmin": false,
   "autoShutdown": false,
   "enableDefaultFreq": false,

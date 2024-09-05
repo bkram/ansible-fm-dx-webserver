@@ -12,3 +12,15 @@ fmdx_xdrd_ip: 127.0.0.1
 fmdx_admin_pass: admin_rulez
 fmdx_tuner_name: Ansible Deployed Tuner
 fmdx_tuner_desc: No One Got Hurt
+fmdx_plugins:
+  - name: webserver-station-logos
+    shortname: station-logos
+    url: https://github.com/Highpoint2000/webserver-station-logos.git
+    entrypoint: StationLogo/updateStationLogo.js
+    install: true
+
+  - name: fm-dx-webserver-plugin-weather
+    shortname: weather
+    url: https://github.com/NoobishSVK/fm-dx-webserver-plugin-weather.git
+    entrypoint: weather/frontend.js
+    install: true

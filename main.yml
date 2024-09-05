@@ -43,3 +43,5 @@
       tags: xdrd
     - role: fm_dx_webserver
       tags: fm_dx_webserver
+    - role: fm_dx_plugins
+      tags: fm_dx_plugins
