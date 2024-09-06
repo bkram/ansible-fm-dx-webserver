@@ -1,0 +1,35 @@
+---
+- name: Ensure /opt/fm-dx-plugins/ directory exists
+  ansible.builtin.file:
+    path: /opt/fm-dx-plugins/
+    state: directory
+    mode: "0755"
+    owner: fmdx
+    group: fmdx
+  become: true
+
+- name: Install plugin when install is true
+  when: item.install
+  block:
+    - name: Debug the current plugin details
+      ansible.builtin.debug:
+        msg: "Processing plugin: {{ item.name }} with URL: {{ item.url }} and install status: {{ item.install }}"
+
+    - name: Clone or update the plugin repo {{ item.name }}
+      ansible.builtin.git:
+        repo: "{{ item.url }}"
+        dest: /opt/fm-dx-plugins/{{ item.shortname }}
+        version: main
+        update: true
+        force: true
+
+    - name: Synchronize plugin {{ item.shortname }}
+      ansible.posix.synchronize:
+        src: /opt/fm-dx-plugins/{{ item.shortname }}/
+        dest: /opt/fm-dx-webserver/plugins/
+        mode: push
+        rsync_opts:
+          - --exclude README.md
+          - --exclude LICENSE
+          - --exclude .git/
+      delegate_to: "{{ inventory_hostname }}"

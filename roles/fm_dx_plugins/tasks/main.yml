@@ -1,0 +1,7 @@
+---
+- name: Iterate over fmdx_plugins list and include tasks
+  ansible.builtin.include_tasks: install_plugin.yml
+  loop: "{{ fmdx_plugins }}"
+  loop_control:
+    loop_var: item
+  when: fmdx_plugins is defined

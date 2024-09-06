@@ -1,0 +1,7 @@
+---
+- name: Restart xdrd service
+  ansible.builtin.systemd:
+    name: xdrd
+    state: restarted
+    daemon_reload: true
+  become: true

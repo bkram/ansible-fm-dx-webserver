@@ -1,2 +1,3 @@
 .venv
 inventories/inventory.ini
+roles/fm_dx_webserver/library/__pycache__/parse_audio_devices_linux.cpython-310.pyc

@@ -1,0 +1,17 @@
+---
+# Global settings applied to all machines
+fmdx_admin_pass: LetMeIn
+
+# Plugins to be installed and enabled
+fmdx_plugins:
+  - name: webserver-station-logos
+    shortname: station-logos
+    url: https://github.com/Highpoint2000/webserver-station-logos.git
+    entrypoint: StationLogo/updateStationLogo.js
+    install: true
+
+  - name: fm-dx-webserver-plugin-weather
+    shortname: weather
+    url: https://github.com/NoobishSVK/fm-dx-webserver-plugin-weather.git
+    entrypoint: weather/frontend.js
+    install: true

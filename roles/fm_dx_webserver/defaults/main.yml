@@ -1,0 +1,13 @@
+---
+fm_dx_webserver_admin: PleaseLetMeIn
+fm_dx_webserver_audio_bitrate: 192k
+fm_dx_webserver_audio_channels: 2
+fm_dx_webserver_audio: Microphone (High Definition Audio Device)
+fm_dx_webserver_com_port: tef
+fm_dx_webserver_device: tef
+fm_dx_webserver_ip: 0.0.0.0
+fm_dx_webserver_port: 8080
+fm_dx_webserver_public_tuner: true
+fm_dx_webserver_tuner_desc: Welcome To My Tuner
+fm_dx_webserver_tuner_name: Ansible Deployed Tuner
+fm_dx_webserver_xdrd_ip: 127.0.0.1
