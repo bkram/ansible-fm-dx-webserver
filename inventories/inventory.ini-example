@@ -1,3 +1,2 @@
-[fmdx_servers]
-fmdx-pi ansible_host=172.16.32.64
-
+[fm_dx_webservers]
+fmdx-debian ansible_host=fmdx-debian

@@ -1,7 +1,7 @@
 {
   "webserver": {
-    "webserverIp": "{{ fmdx_webserver_ip }}",
-    "webserverPort": "{{ fmdx_webserver_port }}",
+    "webserverIp": "{{ fmdx_webserver_ip | default(fm_dx_webserver_ip) }}",
+    "webserverPort": "{{ fmdx_webserver_port | default(fm_dx_webserver_port)}}",
     "banlist": [],
     "chatEnabled": true,
     "tuningLimit": false,
@@ -19,22 +19,22 @@
   },
   "xdrd": {
     "wirelessConnection": true,
-    "comPort": "{{ fmdx_com_port }}",
-    "xdrdIp": "{{ fmdx_xdrd_ip }}",
+    "comPort": "{{ fmdx_com_port | default(fm_dx_webserver_com_port) }}",
+    "xdrdIp": "{{ fmdx_xdrd_ip | default(fm_dx_webserver_xdrd_ip) }}",
     "xdrdPort": "{{ xdrd_tcpip_port }}",
     "xdrdPassword": "{{ xdrd_password }}"
   },
   "audio": {
-    "audioDevice": "Microphone (High Definition Audio Device)",
-    "audioChannels": 2,
-    "audioBitrate": "192k",
+    "audioDevice": "{{ fmdx_audio_device | default(fm_dx_webserver_audio) }}",
+    "audioChannels": {{ fmdx_audio_channels | default(fm_dx_webserver_audio_channels)}},
+    "audioBitrate": "{{ fmdx_audio_bitrate | default(fm_dx_webserver_audio_bitrate)}}",
     "softwareMode": false,
     "startupVolume": "1"
   },
   "identification": {
     "token": null,
-    "tunerName": "{{ fmdx_tuner_name }}",
-    "tunerDesc": "{{ fmdx_tuner_desc }}",
+    "tunerName": "{{ fmdx_tuner_name | default(fm_dx_webserver_tuner_name) }}",
+    "tunerDesc": "{{ fmdx_tuner_desc | default(fm_dx_webserver_tuner_desc) }}",
     "lat": "{{ fmdx_lat | default("49.866317") }}",
     "lon": "{{ fmdx_lon | default("14.817628") }}",
     "broadcastTuner": false,
@@ -42,16 +42,16 @@
     "contact": ""
   },
   "password": {
-    "tunePass": "",
-    "adminPass": "{{ fmdx_admin_pass }}"
+    "tunePass": "{{ fmdx_tune_pass | default("")}}",
+    "adminPass": "{{ fmdx_admin_pass | default(fm_dx_webserver_admin) }}"
   },
-  "plugins": [{% if fmdx_plugins %}{% for plugin in fmdx_plugins %}"{{ plugin.entrypoint }}"{{ ", " if not loop.last }}{% if not loop.last %}{% endif %}{% endfor %}{% endif %}],
-  "device": "tef",
-  "defaultFreq": "87.5",
-  "publicTuner": "{{ fmddx_public_tuner | default("true") }}",
+  "plugins": [{% if fmdx_plugins is defined %}{% for plugin in fmdx_plugins %}"{{ plugin.entrypoint }}"{{ ", " if not loop.last }}{% endfor %}{% endif %}],
+  "device": "{{ fmdx_device | default(fm_dx_webserver_device) }}",
+  "defaultFreq": "{{ fmdx_startup_freq | default("87.5") }}",
+  "publicTuner": "{{ fmddx_public_tuner | default(fm_dx_webserver_public_tuner) }}",
   "lockToAdmin": false,
   "autoShutdown": false,
-  "enableDefaultFreq": false,
+  "enableDefaultFreq": {% if fmdx_startup_freq is defined %}true{% else %}false{% endif %},
   "antennas": {
     "enabled": false,
     "ant1": {

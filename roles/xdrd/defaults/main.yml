@@ -1,0 +1,6 @@
+---
+xdrd_additional_commands:
+xdrd_password: ThisIsNotOK
+xdrd_tcpip_port: 7373
+xdrd_user: xdrd
+xdrd_serial_port: /dev/ttyUSB0

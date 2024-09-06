@@ -67,7 +67,6 @@
   become: true
   register: xdrd_service
   notify:
-    - Reload systemd daemon
     - Restart xdrd service
     - Restart fm-dx-webserver
 

@@ -45,13 +45,24 @@
     path: /opt/fm-dx-webserver/config.json
   register: config_file
 
+- name: Get list of audio devices
+  parse_audio_devices_linux:
+  register: linux_audio_devices
+  when: fmdx_audio_device is not defined
+  changed_when: false
+
+- name: Set audio device when none is configured
+  ansible.builtin.set_fact:
+    fmdx_audio_device: "{{ linux_audio_devices.audio_devices[-1].name }}"
+  when: fmdx_audio_device is not defined
+  changed_when: false
+
 - name: Create fm-dx-webserver config on first install
   ansible.builtin.template:
     src: config.json.j2
     dest: /opt/fm-dx-webserver/config.json
     mode: "0644"
   notify: Restart fm-dx-webserver
-  when: not config_file.stat.exists
 
 - name: Deploy fm-dx-webserver.service from template
   ansible.builtin.template:
@@ -60,7 +71,6 @@
     mode: "0644"
   become: true
   notify:
-    - Reload systemd daemon
     - Restart fm-dx-webserver
 
 - name: Ensure fm-dx-webserver service is started and enabled

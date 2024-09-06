@@ -4,3 +4,4 @@
   loop: "{{ fmdx_plugins }}"
   loop_control:
     loop_var: item
+  when: fmdx_plugins is defined

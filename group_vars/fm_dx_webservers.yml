@@ -1,17 +1,8 @@
 ---
-xdrd_additional_commands:
-xdrd_password: listen_carefully
-xdrd_tcpip_port: 7373
-xdrd_user: xdrd
-xdrd_serial_port: /dev/ttyUSB0
+# Global settings applied to all machines
+fmdx_admin_pass: LetMeIn
 
-fmdx_webserver_ip: 0.0.0.0
-fmdx_webserver_port: 8080
-fmdx_com_port: tef
-fmdx_xdrd_ip: 127.0.0.1
-fmdx_admin_pass: admin_rulez
-fmdx_tuner_name: Ansible Deployed Tuner
-fmdx_tuner_desc: No One Got Hurt
+# Plugins to be installed and enabled
 fmdx_plugins:
   - name: webserver-station-logos
     shortname: station-logos

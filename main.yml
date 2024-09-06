@@ -1,6 +1,6 @@
 ---
 - name: Prepare target systems
-  hosts: fmdx_servers
+  hosts: fm_dx_webservers
 
   tasks:
     - name: Ensure the system is Debian-based
@@ -37,7 +37,7 @@
       become_user: root
 
 - name: Run roles on target systems
-  hosts: fmdx_servers
+  hosts: fm_dx_webservers
   roles:
     - role: xdrd
       tags: xdrd

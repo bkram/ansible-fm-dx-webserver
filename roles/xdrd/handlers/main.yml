@@ -3,9 +3,5 @@
   ansible.builtin.systemd:
     name: xdrd
     state: restarted
-  become: true
-
-- name: Reload systemd daemon
-  ansible.builtin.systemd:
     daemon_reload: true
   become: true

@@ -2,10 +2,6 @@
 - name: Restart fm-dx-webserver
   ansible.builtin.systemd:
     name: fm-dx-webserver
-    state: restarted
-  become: true
-
-- name: Reload systemd daemon
-  ansible.builtin.systemd:
     daemon_reload: true
+    state: restarted
   become: true

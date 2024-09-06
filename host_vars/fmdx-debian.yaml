@@ -1,0 +1,36 @@
+---
+# Settings specific to fmdx-vm-debian machine
+fmdx_tuner_name: My Debian Tuner
+fmdx_tuner_desc: It's on a VM man
+fmdx_startup_freq: 95.6
+xdrd_password: S3cr37
+
+# Optional configuration items below for xdrd:
+# xdrd_additional_commands:
+# xdrd_tcpip_port: 7373
+# xdrd_user: xdrd
+# xdrd_serial_port: /dev/ttyUSB0
+
+# Optional configuration items below for fmdx_webserver
+# fmdx_admin_pass: LetMeIn
+# fmdx_tuner_name: My Debian Tuner
+# fmdx_tuner_desc: It's on a VM man
+# fmdx_webserver_ip: 0.0.0.0
+# fmdx_webserver_port: 8080
+# fmdx_com_port: tef
+# fmdx_xdrd_ip: 127.0.0.1
+
+# When defined also enableDefaultFreq will be set to true
+# fmdx_startup_freq: 95.6
+
+# Override default bitrate, choose 64k | 96k | 128k | 192k | 256k | 320k
+# fmdx_audio_bitrate: 320k
+
+# Overide mono audio
+# fmdx_audio_channels: 1
+
+# Define to override tef, choose tef | xdr | sdr | other
+# fmdx_device: xdr
+
+# Define to override audio detection, when you have multiple audio cards
+# fmdx_audio_device: "hw:myAudioDevice"
