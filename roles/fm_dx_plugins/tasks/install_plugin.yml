@@ -22,6 +22,7 @@
         version: main
         update: true
         force: true
+      register: checkout
 
     - name: Synchronize plugin {{ item.shortname }}
       ansible.posix.synchronize:
@@ -33,3 +34,5 @@
           - --exclude LICENSE
           - --exclude .git/
       delegate_to: "{{ inventory_hostname }}"
+      when: checkout.changed
+      notify: Restart fm-dx-webserver
