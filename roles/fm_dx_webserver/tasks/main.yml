@@ -27,9 +27,9 @@
 
 - name: Clone or update the fm-dx-webserver repo from GitHub
   ansible.builtin.git:
-    repo: https://github.com/NoobishSVK/fm-dx-webserver.git
+    repo: "{{ fm_dx_webserver_repo }}"
     dest: /opt/fm-dx-webserver
-    version: main
+    version: "{{ fm_dx_webserver_branch }}"
     update: true
     force: true
   notify: Restart fm-dx-webserver

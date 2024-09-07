@@ -1,9 +1,17 @@
 ---
 # Settings specific to fmdx-vm-debian machine
-fmdx_tuner_name: My Debian Tuner
-fmdx_tuner_desc: It's on a VM man
+fmdx_tuner_name: My Experimental Tuner
+fmdx_tuner_desc: TEF NANO
 fmdx_startup_freq: 95.6
 xdrd_password: S3cr37
+
+# Map location
+fmdx_lat: 52.032423
+fmdx_lon: 4.310160
+
+# Override default repository and branch
+# fm_dx_webserver_repo:  https://github.com/NoobishSVK/fm-dx-webserver.git
+# fm_dx_webserver_branch: main
 
 # Optional configuration items below for xdrd:
 # xdrd_additional_commands:

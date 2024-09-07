@@ -15,3 +15,21 @@ fmdx_plugins:
     url: https://github.com/NoobishSVK/fm-dx-webserver-plugin-weather.git
     entrypoint: weather/frontend.js
     install: true
+
+  - name: webserver-audio-recorder
+    shortname: audio-recorder
+    url: https://github.com/mrwish7/webserver-audio-recorder.git
+    entrypoint: AudioRec/recorder.js
+    install: true
+
+  - name: FM-DX-Webserver-Plugin-S-Meter
+    shortname: s-meter
+    url: https://github.com/AmateurAudioDude/FM-DX-Webserver-Plugin-S-Meter.git
+    entrypoint: SignalMeterSmall/pluginSignalMeterSmall.js
+    install: true
+
+  - name: FM-DX-Webserver-Plugin-No-Sleep-Mobile
+    shortname: no-sleep-mobile
+    url: https://github.com/AmateurAudioDude/FM-DX-Webserver-Plugin-No-Sleep-Mobile.git
+    entrypoint: NoSleepMobile/pluginNoSleepMobile.js
+    install: true
