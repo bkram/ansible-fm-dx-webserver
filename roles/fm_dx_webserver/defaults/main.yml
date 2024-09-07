@@ -11,3 +11,5 @@ fm_dx_webserver_public_tuner: true
 fm_dx_webserver_tuner_desc: Welcome To My Tuner
 fm_dx_webserver_tuner_name: Ansible Deployed Tuner
 fm_dx_webserver_xdrd_ip: 127.0.0.1
+fm_dx_webserver_repo:  https://github.com/NoobishSVK/fm-dx-webserver.git
+fm_dx_webserver_branch: main

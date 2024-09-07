@@ -31,7 +31,9 @@ Copy inventories/inventory.ini-example to inventories/inventory.ini.
 
 Edit the [inventories/inventory.ini](inventories/inventory.ini) file, so it includes only the systems you want to install on.
 
-Edit the [group_vars/fmdx_servers.yml](group_vars/fmdx_servers.yml) to contain the settings you want.
+Edit the [group_vars/fmdx_servers.yml](group_vars/fmdx_servers.yml) to set the globale settings you want.
+
+Copy and edit [host_vars/fmdx-debian.yaml]host_vars/fmdx-debian.yaml and edit to suit your requirements.
 
 ## Example run
 
