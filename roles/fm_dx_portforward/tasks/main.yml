@@ -1,25 +1,4 @@
 ---
-- name: Install UFW if not already installed
-  become: true
-  ansible.builtin.package:
-    name: ufw
-    state: present
-
-- name: Allow UFW for OpenSSH and WWW
-  become: true
-  community.general.ufw:
-    rule: allow
-    name: "{{ item }}"
-  with_items:
-    - OpenSSH
-    - WWW
-    - WWW Cache
-
-- name: Ensure UFW is enabled
-  become: true
-  community.general.ufw:
-    state: enabled
-
 - name: Ensure IPv4 forwarding is enabled
   become: true
   ansible.posix.sysctl:
@@ -45,6 +24,14 @@
     sysctl_set: true
     state: present
     reload: true
+
+- name: Open port fm-dx-webserver using UFW
+  community.general.ufw:
+    state: enabled
+    rule: allow
+    port: "80"
+    protocol: tcp
+  become: true
 
 - name: Add or remove NAT rules in /etc/ufw/before.rules
   become: true

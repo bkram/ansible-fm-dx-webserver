@@ -1,70 +1,89 @@
 ---
-- name: Install  nodejs, and npm
+- name: Install fm-dx-webserver dependencies
   ansible.builtin.apt:
     name:
       - nodejs
       - npm
       - ffmpeg
+      - alsa-base
+      - alsa-utils
     state: present
     update_cache: true
   become: true
 
-- name: Add the current user to the audio group
+- name: Add fmdx user with no interactive login and add to dialout group
   ansible.builtin.user:
-    name: "{{ ansible_user }}"
+    name: "{{ fm_dx_webserver_user }}"
+    shell: /usr/sbin/nologin
     groups: audio
     append: true
+    state: present
   become: true
 
 - name: Create /opt/fm-dx-webserver directory
   ansible.builtin.file:
     path: /opt/fm-dx-webserver
     state: directory
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    owner: "{{ fm_dx_webserver_user }}"
+    group: "{{ fm_dx_webserver_user }}"
     mode: "0755"
   become: true
 
-- name: Clone or update the fm-dx-webserver repo from GitHub
-  ansible.builtin.git:
-    repo: "{{ fm_dx_webserver_repo }}"
-    dest: /opt/fm-dx-webserver
-    version: "{{ fm_dx_webserver_branch }}"
-    update: true
-    force: true
-  notify: Restart fm-dx-webserver
+- name: Run this as the fmdx user
+  become: true
+  become_user: "{{ fm_dx_webserver_user }}"
 
-- name: Install npm dependencies in the fm-dx-webserver-main directory
-  community.general.npm:
-    path: /opt/fm-dx-webserver/fm-dx-webserver/
-    state: present
-  notify: Restart fm-dx-webserver
+  block:
+    - name: Clone or update the fm-dx-webserver repo from GitHub
+      ansible.builtin.git:
+        repo: "{{ fm_dx_webserver_repo }}"
+        dest: /opt/fm-dx-webserver
+        version: "{{ fm_dx_webserver_branch }}"
+        update: true
+        force: true
+      notify: Restart fm-dx-webserver
 
-- name: Check if fm-dx-webserver config file exists
-  ansible.builtin.stat:
-    path: /opt/fm-dx-webserver/config.json
-  register: config_file
+    - name: Install npm dependencies in the fm-dx-webserver-main directory
+      community.general.npm:
+        path: /opt/fm-dx-webserver/fm-dx-webserver/
+        state: present
+      notify: Restart fm-dx-webserver
 
-- name: Get list of audio devices
-  parse_audio_devices_linux:
-  register: linux_audio_devices
-  when: fm_dx_webserver_audio_detect
-  changed_when: false
-  check_mode: false
+    - name: Check if fm-dx-webserver config file exists
+      ansible.builtin.stat:
+        path: /opt/fm-dx-webserver/config.json
+      register: config_file
 
-- name: Set audio device to detected {{ linux_audio_devices.audio_devices[-1].name }}
-  ansible.builtin.set_fact:
-    fm_dx_webserver_audio: "{{ linux_audio_devices.audio_devices[-1].name }}"
-  when: fm_dx_webserver_audio_detect
-  changed_when: false
-  check_mode: false
+    - name: Get list of audio devices
+      parse_audio_devices_linux:
+      register: linux_audio_devices
+      when: fm_dx_webserver_audio_detect
+      changed_when: false
+      check_mode: false
 
+    - name: Set audio device to detected {{ linux_audio_devices.audio_devices[-1].name }}
+      ansible.builtin.set_fact:
+        fm_dx_webserver_audio: "{{ linux_audio_devices.audio_devices[-1].name }}"
+      when: fm_dx_webserver_audio_detect
+      changed_when: false
+      check_mode: false
 - name: Template fm-dx-webserver config file
   ansible.builtin.template:
     src: config.json.j2
     dest: /opt/fm-dx-webserver/config.json
     mode: "0644"
+    owner: "{{ fm_dx_webserver_user }}"
+    group: "{{ fm_dx_webserver_user }}"
   notify: Restart fm-dx-webserver
+  become: true
+
+- name: Open port fm-dx-webserver using UFW
+  community.general.ufw:
+    state: enabled
+    rule: allow
+    port: "{{ fm_dx_webserver_port }}"
+    protocol: tcp
+  become: true
 
 - name: Deploy fm-dx-webserver.service from template
   ansible.builtin.template:
