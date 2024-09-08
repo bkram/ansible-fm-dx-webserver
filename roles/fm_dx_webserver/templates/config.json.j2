@@ -1,57 +1,52 @@
 {
   "webserver": {
-    "webserverIp": "{{ fmdx_webserver_ip | default(fm_dx_webserver_ip) }}",
-    "webserverPort": "{{ fmdx_webserver_port | default(fm_dx_webserver_port)}}",
-    "banlist": [],
-    "chatEnabled": true,
-    "tuningLimit": false,
-    "tuningLowerLimit": "0",
-    "tuningUpperLimit": "108",
-    "defaultTheme": "theme1",
-    "presets": [
-      "87.5",
-      "87.5",
-      "87.5",
-      "87.5"
-    ],
-    "bgImage": "",
-    "rdsMode": false
+    "webserverIp": "{{ fm_dx_webserver_ip }}",
+    "webserverPort": "{{ fm_dx_webserver_port }}",
+    "banlist": [{% for ban in fm_dx_webserver_banlist %}"{{ ban }}"{{ ", " if not loop.last }}{% endfor %}],
+    "chatEnabled": {{ fm_dx_webserver_chat | string | lower }},
+    "tuningLimit": {{ fm_dx_webserver_tuning_limit | string | lower }},
+    "tuningLowerLimit": "{{ fm_dx_webserver_tuning_lower }}",
+    "tuningUpperLimit": "{{ fm_dx_webserver_tuning_higher }}",
+    "defaultTheme": "theme{{ fm_dx_webserver_theme }}",
+    "presets": [{% for preset in fm_dx_webserver_presets %}"{{ preset }}"{{ ", " if not loop.last }}{% endfor %}],
+    "bgImage": "{{ fm_dx_webserver_bgimage }}",
+    "rdsMode": {{ fm_dx_webserver_rdsmode | string | lower }}
   },
   "xdrd": {
     "wirelessConnection": true,
-    "comPort": "{{ fmdx_com_port | default(fm_dx_webserver_com_port) }}",
-    "xdrdIp": "{{ fmdx_xdrd_ip | default(fm_dx_webserver_xdrd_ip) }}",
+    "comPort": "{{ fm_dx_webserver_com_port }}",
+    "xdrdIp": "{{  fm_dx_webserver_xdrd_ip }}",
     "xdrdPort": "{{ xdrd_tcpip_port }}",
     "xdrdPassword": "{{ xdrd_password }}"
   },
   "audio": {
-    "audioDevice": "{{ fmdx_audio_device | default(fm_dx_webserver_audio) }}",
-    "audioChannels": {{ fmdx_audio_channels | default(fm_dx_webserver_audio_channels)}},
-    "audioBitrate": "{{ fmdx_audio_bitrate | default(fm_dx_webserver_audio_bitrate)}}",
-    "softwareMode": false,
-    "startupVolume": "1"
+    "audioDevice": "{{ fm_dx_webserver_audio }}",
+    "audioChannels": {{ fm_dx_webserver_audio_channels }},
+    "audioBitrate": "{{ fm_dx_webserver_audio_bitrate }}",
+    "softwareMode": {{ fm_dx_webserver_audio_software_mode | string | lower }},
+    "startupVolume": "{{ fm_dx_webserver_audio_startup_volume }}"
   },
   "identification": {
-    "token": null,
-    "tunerName": "{{ fmdx_tuner_name | default(fm_dx_webserver_tuner_name) }}",
-    "tunerDesc": "{{ fmdx_tuner_desc | default(fm_dx_webserver_tuner_desc) }}",
-    "lat": "{{ fmdx_lat | default("49.866317") }}",
-    "lon": "{{ fmdx_lon | default("14.817628") }}",
-    "broadcastTuner": false,
-    "proxyIp": "",
-    "contact": ""
+    "token": "{{ fm_dx_webserver_token }}",
+    "tunerName": "{{ fm_dx_webserver_tuner_name }}",
+    "tunerDesc": "{{ fm_dx_webserver_tuner_desc }}",
+    "lat": "{{ fm_dx_webserver_lat }}",
+    "lon": "{{ fm_dx_webserver_lon }}",
+    "broadcastTuner": {{ fm_dx_webserver_broadcast | string | lower }},
+    "proxyIp": "{{ fm_dx_webserver_proxy_ip }}",
+    "contact": "{{ fm_dx_webserver_contact }}"
   },
   "password": {
-    "tunePass": "{{ fmdx_tune_pass | default("")}}",
-    "adminPass": "{{ fmdx_admin_pass | default(fm_dx_webserver_admin) }}"
+    "tunePass": "{{ fm_dx_webserver_tune_pass }}",
+    "adminPass": "{{ fm_dx_webserver_admin_pass }}"
   },
   "plugins": [{% if fmdx_plugins is defined %}{% for plugin in fmdx_plugins %}"{{ plugin.entrypoint }}"{{ ", " if not loop.last }}{% endfor %}{% endif %}],
-  "device": "{{ fmdx_device | default(fm_dx_webserver_device) }}",
-  "defaultFreq": "{{ fmdx_startup_freq | default("87.5") }}",
-  "publicTuner": "{{ fmddx_public_tuner | default(fm_dx_webserver_public_tuner) }}",
-  "lockToAdmin": false,
-  "autoShutdown": false,
-  "enableDefaultFreq": {% if fmdx_startup_freq is defined %}true{% else %}false{% endif %},
+  "device": "{{ fm_dx_webserver_device }}",
+  "defaultFreq": "{{ fm_dx_webserver_default_freq }}",
+  "publicTuner": "{{ fm_dx_webserver_public_tuner | string | lower }}",
+  "lockToAdmin": {{ fm_dx_webserver_lock_to_admin | string | lower }},
+  "autoShutdown": {{ fm_dx_webserver_auto_shutdown| string | lower }},
+  "enableDefaultFreq": {{ fm_dx_webserver_default_enable | string | lower }},
   "antennas": {
     "enabled": false,
     "ant1": {
@@ -71,5 +66,5 @@
       "name": "Ant D"
     }
   },
-  "bwSwitch": false
+  "bwSwitch": {{ fm_dx_webserver_antenna_bw_switch | string | lower }}
 }

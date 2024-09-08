@@ -1,44 +1,16 @@
 ---
-# Settings specific to fmdx-vm-debian machine
-fmdx_tuner_name: My Experimental Tuner
-fmdx_tuner_desc: TEF NANO
-fmdx_startup_freq: 95.6
+# For all possible fm-dx-webserver settings see roles/fm_dx_webserver/defaults/main.yml
+fm_dx_webserver_tuner_name: My Experimental Tuner
+fm_dx_webserver_tuner_desc: TEF NANO
+fm_dx_webserver_admin_pass: LetMeIn
+fm_dx_webserver_default_freq: 95.6
+fm_dx_webserver_default_enable: true
+fm_dx_webserver_bgimage: https://www.fm-tuner.nl/fm-tuner.jpg
+fm_dx_webserver_lat: 52.0377
+fm_dx_webserver_lon: 4.3220
+
+# For all possible xdrd settings see roles/xdrd/defaults/main.yml
 xdrd_password: S3cr37
 
-# Map location
-fmdx_lat: 52.032423
-fmdx_lon: 4.310160
-
-# Override default repository and branch
-# fm_dx_webserver_repo:  https://github.com/NoobishSVK/fm-dx-webserver.git
-# fm_dx_webserver_branch: main
-
-# Optional configuration items below for xdrd:
-# xdrd_additional_commands:
-# xdrd_tcpip_port: 7373
-# xdrd_user: xdrd
-# xdrd_serial_port: /dev/ttyUSB0
-
-# Optional configuration items below for fmdx_webserver
-# fmdx_admin_pass: LetMeIn
-# fmdx_tuner_name: My Debian Tuner
-# fmdx_tuner_desc: It's on a VM man
-# fmdx_webserver_ip: 0.0.0.0
-# fmdx_webserver_port: 8080
-# fmdx_com_port: tef
-# fmdx_xdrd_ip: 127.0.0.1
-
-# When defined also enableDefaultFreq will be set to true
-# fmdx_startup_freq: 95.6
-
-# Override default bitrate, choose 64k | 96k | 128k | 192k | 256k | 320k
-# fmdx_audio_bitrate: 320k
-
-# Overide mono audio
-# fmdx_audio_channels: 1
-
-# Define to override tef, choose tef | xdr | sdr | other
-# fmdx_device: xdr
-
-# Define to override audio detection, when you have multiple audio cards
-# fmdx_audio_device: "hw:myAudioDevice"
+# Expose fm-dx-webserver on normal http port (80), requires fm-dx-webserver on 8080 for now.
+fm_dx_portforward_enabled: true

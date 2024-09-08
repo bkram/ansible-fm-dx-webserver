@@ -24,7 +24,7 @@
         force: true
       register: checkout
 
-    - name: Synchronize plugin {{ item.shortname }}
+    - name: Synchronize plugin {{ item.shortname }} # noqa: no-handler no-changed-when
       ansible.posix.synchronize:
         src: /opt/fm-dx-plugins/{{ item.shortname }}/
         dest: /opt/fm-dx-webserver/plugins/

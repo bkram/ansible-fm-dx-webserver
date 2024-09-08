@@ -48,16 +48,18 @@
 - name: Get list of audio devices
   parse_audio_devices_linux:
   register: linux_audio_devices
-  when: fmdx_audio_device is not defined
+  when: fm_dx_webserver_audio_detect
   changed_when: false
+  check_mode: false
 
-- name: Set audio device when none is configured
+- name: Set audio device to detected {{ linux_audio_devices.audio_devices[-1].name }}
   ansible.builtin.set_fact:
-    fmdx_audio_device: "{{ linux_audio_devices.audio_devices[-1].name }}"
-  when: fmdx_audio_device is not defined
+    fm_dx_webserver_audio: "{{ linux_audio_devices.audio_devices[-1].name }}"
+  when: fm_dx_webserver_audio_detect
   changed_when: false
+  check_mode: false
 
-- name: Create fm-dx-webserver config on first install
+- name: Template fm-dx-webserver config file
   ansible.builtin.template:
     src: config.json.j2
     dest: /opt/fm-dx-webserver/config.json

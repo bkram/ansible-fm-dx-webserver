@@ -1,8 +1,10 @@
 ---
 # Global settings applied to all machines
-fmdx_admin_pass: LetMeIn
+# Place global settings below
+# For all possible xdrd settings see roles/xdrd/defaults/main.yml
+# For all possible fm-dx-webserver settings see roles/fm_dx_webserver/defaults/main.yml
 
-# Plugins to be installed and enabled
+# Plugins to be installed and enabled on all fm-dx-webservers
 fmdx_plugins:
   - name: webserver-station-logos
     shortname: station-logos

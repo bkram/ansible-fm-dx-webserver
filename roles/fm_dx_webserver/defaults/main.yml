@@ -1,8 +1,11 @@
 ---
-fm_dx_webserver_admin: PleaseLetMeIn
+fm_dx_webserver_admin_pass: PleaseLetMeIn
 fm_dx_webserver_audio_bitrate: 192k
 fm_dx_webserver_audio_channels: 2
 fm_dx_webserver_audio: Microphone (High Definition Audio Device)
+fm_dx_webserver_audio_detect: true
+fm_dx_webserver_audio_software_mode: false
+fm_dx_webserver_audio_startup_volume: 1
 fm_dx_webserver_com_port: tef
 fm_dx_webserver_device: tef
 fm_dx_webserver_ip: 0.0.0.0
@@ -11,5 +14,26 @@ fm_dx_webserver_public_tuner: true
 fm_dx_webserver_tuner_desc: Welcome To My Tuner
 fm_dx_webserver_tuner_name: Ansible Deployed Tuner
 fm_dx_webserver_xdrd_ip: 127.0.0.1
-fm_dx_webserver_repo:  https://github.com/NoobishSVK/fm-dx-webserver.git
+fm_dx_webserver_repo: https://github.com/NoobishSVK/fm-dx-webserver.git
 fm_dx_webserver_branch: main
+fm_dx_webserver_tune_pass:
+fm_dx_webserver_default_freq: 87.5
+fm_dx_webserver_default_enable: false
+fm_dx_webserver_lat: 49.866317
+fm_dx_webserver_lon: 14.817628
+fm_dx_webserver_broadcast: false
+fm_dx_webserver_proxy_ip:
+fm_dx_webserver_contact:
+fm_dx_webserver_token:
+fm_dx_webserver_lock_to_admin: false
+fm_dx_webserver_auto_shutdown: false
+fm_dx_webserver_antenna_bw_switch: false
+fm_dx_webserver_bgimage:
+fm_dx_webserver_presets: [87.5, 87.5, 87.5, 87.5]
+fm_dx_webserver_banlist: []
+fm_dx_webserver_chat: false
+fm_dx_webserver_tuning_limit: true
+fm_dx_webserver_tuning_lower: 64
+fm_dx_webserver_tuning_higher: 108
+fm_dx_webserver_rdsmode: false
+fm_dx_webserver_theme: 1

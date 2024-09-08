@@ -1,0 +1,60 @@
+---
+- name: Install UFW if not already installed
+  become: true
+  ansible.builtin.package:
+    name: ufw
+    state: present
+
+- name: Allow UFW for OpenSSH and WWW
+  become: true
+  community.general.ufw:
+    rule: allow
+    name: "{{ item }}"
+  with_items:
+    - OpenSSH
+    - WWW
+    - WWW Cache
+
+- name: Ensure UFW is enabled
+  become: true
+  community.general.ufw:
+    state: enabled
+
+- name: Ensure IPv4 forwarding is enabled
+  become: true
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: "{{ '1' if fm_dx_portforward_enabled else '0' }}"
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: Persist IPv4 forwarding setting in /etc/ufw/sysctl.conf
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/ufw/sysctl.conf
+    regexp: ^#?net.ipv4.ip_forward=.*
+    line: net.ipv4.ip_forward={{ "1" if fm_dx_portforward_enabled else "0" }}
+    state: present
+
+- name: Ensure IPv6 forwarding is enabled
+  become: true
+  ansible.posix.sysctl:
+    name: net.ipv6.conf.all.forwarding
+    value: "{{ '1' if fm_dx_portforward_enabled else '0' }}"
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: Add or remove NAT rules in /etc/ufw/before.rules
+  become: true
+  ansible.builtin.blockinfile:
+    path: /etc/ufw/before.rules
+    block: |
+      *nat
+      :PREROUTING ACCEPT [0:0]
+      -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port {{ fm_dx_webserver_port }}
+      COMMIT
+    marker: "# {mark} ANSIBLE MANAGED NAT RULES"
+    state: "{{ 'present' if fm_dx_portforward_enabled else 'absent' }}"
+  notify: Reload UFW
