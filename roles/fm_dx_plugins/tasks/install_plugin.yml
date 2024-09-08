@@ -4,12 +4,14 @@
     path: /opt/fm-dx-plugins/
     state: directory
     mode: "0755"
-    owner: fmdx
-    group: fmdx
+    owner: "{{ fm_dx_webserver_user }}"
+    group: "{{ fm_dx_webserver_user }}"
   become: true
 
 - name: Install plugin when install is true
   when: item.install
+  become: true
+  become_user: "{{ fm_dx_webserver_user }}"
   block:
     - name: Debug the current plugin details
       ansible.builtin.debug:

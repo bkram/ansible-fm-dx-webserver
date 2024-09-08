@@ -1,0 +1,52 @@
+---
+- name: Ensure the system is Debian-based
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: This playbook is intended for Debian-based systems only.
+
+- name: Check if sudo is installed
+  ansible.builtin.command: which sudo
+  register: sudo_installed
+  ignore_errors: true
+  changed_when: false
+
+- name: Install sudo if not installed
+  ansible.builtin.apt:
+    name: sudo
+    state: present
+    update_cache: true
+  when: sudo_installed.rc != 0
+  become: true
+  become_method: ansible.builtin.su
+  become_user: root
+
+- name: Configure passwordless sudo for fmdx user
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/{{ fm_dx_webserver_user }}
+    content: |
+      fmdx ALL=(ALL) NOPASSWD:ALL
+    mode: "0440"
+  when: sudo_installed.rc != 0
+  become: true
+  become_method: ansible.builtin.su
+  become_user: root
+
+- name: Install UFW if not already installed
+  become: true
+  ansible.builtin.package:
+    name: ufw
+    state: present
+
+- name: Make sure OpenSSH is allowed so we are not locked out
+  community.general.ufw:
+    state: enabled
+    rule: allow
+    name: OpenSSH
+  become: true
+
+- name: Ensure UFW is enabled
+  become: true
+  community.general.ufw:
+    state: enabled
+  notify: Reload UFW

@@ -37,3 +37,4 @@ fm_dx_webserver_tuning_lower: 64
 fm_dx_webserver_tuning_higher: 108
 fm_dx_webserver_rdsmode: false
 fm_dx_webserver_theme: 1
+fm_dx_webserver_user: fmdx
