@@ -26,6 +26,38 @@
         force: true
       register: checkout
 
+    - name: Check if the web directory exists in plugin checkout
+      ansible.builtin.stat:
+        path: /opt/fm-dx-plugins/{{ item.shortname }}/web
+      register: web_dir_check
+
+    - name: Check if the plugin directory exists in plugin checkout
+      ansible.builtin.stat:
+        path: /opt/fm-dx-plugins/{{ item.shortname }}/plugin
+      register: plugin_dir_check
+
+    - name: Synchronize plugin web directory {{ item.shortname }} # noqa: no-handler no-changed-when
+      ansible.posix.synchronize:
+        src: /opt/fm-dx-plugins/{{ item.shortname }}/web/
+        dest: /opt/fm-dx-webserver/web/
+        mode: push
+      delegate_to: "{{ inventory_hostname }}"
+      when:
+        - checkout.changed
+        - web_dir_check.stat.exists
+      notify: Restart fm-dx-webserver
+
+    - name: Synchronize plugin plugin {{ item.shortname }} # noqa: no-handler no-changed-when
+      ansible.posix.synchronize:
+        src: /opt/fm-dx-plugins/{{ item.shortname }}/plugin/
+        dest: /opt/fm-dx-webserver/plugins/
+        mode: push
+      delegate_to: "{{ inventory_hostname }}"
+      when:
+        # - checkout.changed
+        - plugin_dir_check.stat.exists
+      notify: Restart fm-dx-webserver
+
     - name: Synchronize plugin {{ item.shortname }} # noqa: no-handler no-changed-when
       ansible.posix.synchronize:
         src: /opt/fm-dx-plugins/{{ item.shortname }}/
@@ -35,6 +67,10 @@
           - --exclude README.md
           - --exclude LICENSE
           - --exclude .git/
+          - --exclude .gitattributes
       delegate_to: "{{ inventory_hostname }}"
-      when: checkout.changed
+      when:
+        - checkout.changed
+        - not web_dir_check.stat.exists
+        - not plugin_dir_check.stat.exists
       notify: Restart fm-dx-webserver
