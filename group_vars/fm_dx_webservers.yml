@@ -35,3 +35,9 @@ fmdx_plugins:
     url: https://github.com/AmateurAudioDude/FM-DX-Webserver-Plugin-No-Sleep-Mobile.git
     entrypoint: NoSleepMobile/pluginNoSleepMobile.js
     install: true
+
+  - name: DX-Retro-Font
+    shortname: retro-font
+    url: https://github.com/bkram/dx-retro-font.git
+    entrypoint: retro-font/retro-font.js
+    install: true
