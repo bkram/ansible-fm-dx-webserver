@@ -28,12 +28,12 @@
 
     - name: Check if the web directory exists in plugin checkout
       ansible.builtin.stat:
-        path: "/opt/fm-dx-plugins/{{ item.shortname }}/web"
+        path: /opt/fm-dx-plugins/{{ item.shortname }}/web
       register: web_dir_check
 
     - name: Check if the plugin directory exists in plugin checkout
       ansible.builtin.stat:
-        path: "/opt/fm-dx-plugins/{{ item.shortname }}/plugin"
+        path: /opt/fm-dx-plugins/{{ item.shortname }}/plugin
       register: plugin_dir_check
 
     - name: Synchronize plugin web directory {{ item.shortname }} # noqa: no-handler no-changed-when
