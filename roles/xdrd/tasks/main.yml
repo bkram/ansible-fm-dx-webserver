@@ -16,6 +16,7 @@
       - unzip
       - make
       - gcc
+      - git
     state: present
     update_cache: true
   become: true

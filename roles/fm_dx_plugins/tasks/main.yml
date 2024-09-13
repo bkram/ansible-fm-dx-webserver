@@ -1,4 +1,12 @@
 ---
+- name: Install plugin dependencies
+  ansible.builtin.apt:
+    name:
+      - rsync
+    state: present
+    update_cache: true
+  become: true
+
 - name: Iterate over fmdx_plugins list and include tasks
   ansible.builtin.include_tasks: install_plugin.yml
   loop: "{{ fmdx_plugins }}"

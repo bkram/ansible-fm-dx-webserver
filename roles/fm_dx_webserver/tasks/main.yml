@@ -5,7 +5,7 @@
       - nodejs
       - npm
       - ffmpeg
-      - alsa-base
+      # - alsa-base on Ubuntu ?
       - alsa-utils
     state: present
     update_cache: true
